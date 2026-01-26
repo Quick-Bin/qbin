@@ -2,6 +2,7 @@ import { Response } from "../utils/response.ts";
 import { ResponseMessages } from "../utils/messages.ts";
 import { parsePagination } from "../utils/validator.ts";
 import { createMetadataRepository } from "../db/db.ts";
+import { EMAIL } from "../config/constants.ts";
 
 export async function getStorage(ctx) {
   const user = ctx.state.session?.get("user");
@@ -11,7 +12,10 @@ export async function getStorage(ctx) {
   const offset = (page - 1) * pageSize;
 
   const repo = await createMetadataRepository();
-  const { items, total } = await repo.paginateByEmail(user.email, pageSize, offset);
+  const isAdmin = user.email === EMAIL;
+  const { items, total } = isAdmin
+    ? await repo.listAlive(pageSize, offset)
+    : await repo.paginateByEmail(user.email, pageSize, offset);
   const totalPages = Math.ceil(total / pageSize);
 
   return new Response(ctx, 200, ResponseMessages.SUCCESS, {

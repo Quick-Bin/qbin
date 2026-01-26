@@ -22,5 +22,5 @@
     "lineWidth": 100,
     "proseWrap": "preserve"
   },
-  "unstable": ["fmt-component"]
+  "unstable": ["kv", "broadcast-channel", "fmt-component"]
 }

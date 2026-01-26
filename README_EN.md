@@ -5,7 +5,7 @@
 
   > ✨ A lightweight Cloud Note & PasteBin alternative. Save text, code, images, videos, and any content with just one click for easier sharing!
 
-  [English] · [**简体中文**](README.md) · [Demo Website](https://qbin.me) · [Documentation](Docs/document.md) · [Self-hosting Guide](Docs/self-host.md) · [REST API](Docs/REST%20API.md) 
+  [English] · [**简体中文**](README.md) · [Demo Website] · [Documentation](Docs/document.md) · [Self-hosting Guide](Docs/self-host.md) · [REST API](Docs/REST%20API.md) 
 </div>
 
 ## 🖼️ Feature Preview

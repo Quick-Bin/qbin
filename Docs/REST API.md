@@ -25,7 +25,7 @@ POST /save/{访问路径}/{密码}
 import requests
 
 def upload_content(path, content, password="", expire=315360000):
-    url = f'https://qbin.me/save/{path}/{password}'
+    url = f'http://localhost:8000/save/{path}/{password}'
     headers = {
         'Content-Type': 'text/plain',
         'x-expire': str(expire),

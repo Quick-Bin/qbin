@@ -19,6 +19,7 @@ import {
   MAX_UPLOAD_FILE_SIZE,
   mimeTypeRegex,
   reservedPaths,
+  EMAIL,
 } from "../config/constants.ts";
 import { createMetadataRepository } from "../db/db.ts";
 import { Metadata, AppState } from "../utils/types.ts";
@@ -90,9 +91,10 @@ export async function remove(ctx: Context<AppState>) {
   const repo = await createMetadataRepository();
   const meta = await isCached(key, pwd, repo);
   if (!meta || (meta.expire ?? 0) < getTimestamp()) throw new Response(ctx, 404, ResponseMessages.CONTENT_NOT_FOUND);
-  if (!checkPassword(meta.pwd, pwd)) throw new Response(ctx, 403, ResponseMessages.PASSWORD_INCORRECT);
   const email = ctx.state.session?.get("user")?.email;
-  if (email !== meta.email) throw new Response(ctx, 403, ResponseMessages.PERMISSION_DENIED);
+  const isAdmin = email === EMAIL;
+  if (!isAdmin && !checkPassword(meta.pwd, pwd)) throw new Response(ctx, 403, ResponseMessages.PASSWORD_INCORRECT);
+  if (!isAdmin && email !== meta.email) throw new Response(ctx, 403, ResponseMessages.PERMISSION_DENIED);
 
   delete meta.content;
   await deleteCache(key, meta);

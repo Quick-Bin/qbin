@@ -6,6 +6,7 @@ import {ResponseMessages} from "../utils/messages.ts";
 import {parsePagination} from "../utils/validator.ts";
 import {createMetadataRepository} from "../db/repositories/metadataRepository.ts";
 import {getTimestamp} from "../utils/common.ts";
+import { get_all_env } from "../config/env.ts";
 
 
 export async function syncDBToKV(ctx: Context<AppState>, repo) {
@@ -124,5 +125,15 @@ export async function purgeExpiredCacheEntries(ctx){
   return new Response(ctx, 200, ResponseMessages.SUCCESS, {
     removed,
     kept,
+  });
+}
+
+export async function exportEnv(ctx) {
+  if (QBIN_ENV !== "dev") return new Response(ctx, 403, ResponseMessages.FORBIDDEN);
+  const email = await ctx.state.session?.get("user")?.email;
+  if (email !== EMAIL) return new Response(ctx, 403, ResponseMessages.ADMIN_REQUIRED);
+
+  return new Response(ctx, 200, ResponseMessages.SUCCESS, {
+    env: get_all_env(),
   });
 }

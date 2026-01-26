@@ -4,7 +4,7 @@ QBin 提供便捷的内容编辑&分享服务，让您轻松存储和分享各�
 
 ## 🚀 快速开始
 
-1. 访问你部署好的地址, 示例 [QBin Demo](https://qbin.me)
+1. 访问你部署好的地址, 示例 [QBin Demo]
 2. 选择适合您需求的编辑器：
    - 📒 **Markdown编辑器**：支持实时预览，方便文档编写
    - 📝 **代码编辑器**：提供语法高亮，适合各类编程代码
@@ -27,13 +27,13 @@ QBin 提供便捷的内容编辑&分享服务，让您轻松存储和分享各�
 
 QBin 提供两种链接格式，满足不同分享需求：
 
-- **预览模式**：`https://qbin.me/p/访问路径/密码`
+- **预览模式**：`http://localhost:8000/p/访问路径/密码`
   - 带有完整管理界面，方便浏览和操作
-  - 例如：`https://qbin.me/p/document`
+  - 例如：`http://localhost:8000/p/document`
 
-- **直链模式**：`https://qbin.me/r/访问路径/密码`
+- **直链模式**：`http://localhost:8000/r/访问路径/密码`
   - 仅显示纯内容，无界面元素
-  - 例如：`https://qbin.me/r/document`
+  - 例如：`http://localhost:8000/r/document`
 
 ## 📱 内容管理
 

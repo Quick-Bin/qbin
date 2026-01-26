@@ -5,12 +5,11 @@
 
   > ✨ 轻量的 Cloud Note & PasteBin 替代方案，一键保存文本、代码、图片、视频等任意内容，分享更便捷！
 
-  [简体中文] · [**English**](README_EN.md) · [演示站点](https://qbin.me) · [使用文档](Docs/document.md) · [自托管教程](Docs/self-host.md) · [接口文档](Docs/REST%20API.md)
+  [简体中文] · [**English**](README_EN.md) · [演示站点] · [使用文档](Docs/document.md) · [自托管教程](Docs/self-host.md) · [接口文档](Docs/REST%20API.md)
 
 <!-- SHIELD GROUP -->
 
 [![][docker-pulls-shield]][docker-pulls-link]
-[![][deno-shield]][deno-link]
 [![][latest-version-shield]][latest-version-link]
 [![][github-stars-shield]][github-stars-link]
 [![][github-license-shield]][github-license-link]
@@ -192,5 +191,3 @@ docker run -d -p 8000:8000 \
 [github-stars-link]: https://github.com/quick-bin/qbin/stargazers
 [github-license-shield]: https://img.shields.io/github/license/quick-bin/qbin?style=flat-square&logo=github&labelColor=black
 [github-license-link]: https://github.com/quick-bin/qbin/issues
-[deno-link]: https://qbin.me
-[deno-shield]: https://img.shields.io/website?down_message=offline&label=Deno&labelColor=black&logo=deno&style=flat-square&up_message=online&url=https%3A%2F%2Fqbin.me

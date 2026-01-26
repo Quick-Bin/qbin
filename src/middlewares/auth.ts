@@ -150,7 +150,7 @@ export async function authMiddleware(ctx: Context, next: () => Promise<unknown>)
     if (!session.has("user") && !["/login", "/api/login/admin", "/favicon.ico", "/r/"].some(prefix => currentPath.startsWith(prefix))) {
       const demoToken = await generateJwtToken({
         id: 1,
-        email: "demo@qbin.me",
+        email: "qbin@github.com",
         name: "Anonymous User",
         provider: "anonymous",
       }, 43200);
@@ -188,7 +188,7 @@ export async function authMiddleware(ctx: Context, next: () => Promise<unknown>)
         if (ENABLE_ANONYMOUS_ACCESS === 1 && payload.provider === "anonymous") {
           const demoToken = await generateJwtToken({
             id: 1,
-            email: "demo@qbin.me",
+            email: "qbin@github.com",
             name: "Anonymous User",
             provider: "anonymous",
           }, 43200);
@@ -201,7 +201,7 @@ export async function authMiddleware(ctx: Context, next: () => Promise<unknown>)
           session.set("user", {
             id: 1,
             name: "Anonymous User",
-            email: "demo@qbin.me",
+            email: "qbin@github.com",
           });
         } else {
           return new Response(ctx, 401, "Cookie expired");
