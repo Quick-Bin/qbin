@@ -1,33 +1,46 @@
 /**
  * 模板渲染 / 读取工具
  */
-import {join} from "https://deno.land/std/path/mod.ts";
+import {join, normalize, resolve, relative, isAbsolute} from "https://deno.land/std/path/mod.ts";
 import {basePath} from "../config/constants.ts";
 import {getMime} from "../utils/types.ts";
 import {cyrb53_str} from "./common.ts";
 
+// 解析静态资源真实路径并校验是否越出静态目录，防止路径穿越
+function resolveStaticPath(subDir: string, pathname: string): string {
+    const baseDir = resolve(join(basePath, subDir));
+    const target = resolve(baseDir, normalize(pathname));
+    const rel = relative(baseDir, target);
+    if (rel === ".." || rel.startsWith(".." + "/") || rel.startsWith(".." + "\\") || isAbsolute(rel)) {
+        throw new Deno.errors.NotFound("Invalid static path");
+    }
+    return target;
+}
+
 
 export async function getJS(ctx, pathname, status = 200): Promise<string> {
     try {
-        ctx.response.body = await Deno.readTextFile(join(basePath, `/static/js/${pathname}`));
+        ctx.response.body = await Deno.readTextFile(resolveStaticPath("/static/js", pathname));
         ctx.response.status = status;
         ctx.response.headers.set("Content-Type", "application/javascript");
         // ctx.response.headers.set("Cache-Control", "public, max-age=86400, immutable");
         const hash = cyrb53_str(`${pathname}-${ctx.response.body.length}`);
         ctx.state.metadata = {etag: hash};
     } catch (error) {
+        ctx.response.status = 404;
     }
 }
 
 export async function getCSS(ctx, pathname, status = 200): Promise<string> {
     try {
-        ctx.response.body = await Deno.readTextFile(join(basePath, `/static/css/${pathname}`));
+        ctx.response.body = await Deno.readTextFile(resolveStaticPath("/static/css", pathname));
         ctx.response.status = status;
         ctx.response.headers.set("Content-Type", "text/css");
         // ctx.response.headers.set("Cache-Control", "public, max-age=86400, immutable");
         const hash = cyrb53_str(`${pathname}-${ctx.response.body.length}`);
         ctx.state.metadata = {etag: hash};
     } catch (error) {
+        ctx.response.status = 404;
     }
 }
 
@@ -35,7 +48,7 @@ export async function getIMG(ctx, pathname, status = 200): Promise<string> {
     try {
         const extension = pathname.split('.').pop()?.toLowerCase() || '';
         const contentType = getMime(extension) || 'application/octet-stream';
-        ctx.response.body = await Deno.readFile(join(basePath, `/static/img/${pathname}`));
+        ctx.response.body = await Deno.readFile(resolveStaticPath("/static/img", pathname));
         ctx.response.status = status;
 
         ctx.response.headers.set("Content-Type", contentType);
@@ -43,6 +56,7 @@ export async function getIMG(ctx, pathname, status = 200): Promise<string> {
         const hash = cyrb53_str(`${pathname}-${ctx.response.body.length}`);
         ctx.state.metadata = {etag: hash};
     } catch (error) {
+        ctx.response.status = 404;
     }
 }
 
@@ -50,7 +64,7 @@ export async function getFONTS(ctx, pathname, status = 200): Promise<string> {
     try {
         const extension = pathname.split('.').pop()?.toLowerCase() || '';
         const contentType = getMime(extension) || 'application/octet-stream';
-        ctx.response.body = await Deno.readFile(join(basePath, `/static/css/fonts/${pathname}`));
+        ctx.response.body = await Deno.readFile(resolveStaticPath("/static/css/fonts", pathname));
         ctx.response.status = status;
 
         ctx.response.headers.set("Content-Type", contentType);
@@ -58,6 +72,7 @@ export async function getFONTS(ctx, pathname, status = 200): Promise<string> {
         const hash = cyrb53_str(`${pathname}-${ctx.response.body.length}`);
         ctx.state.metadata = {etag: hash};
     } catch (error) {
+        ctx.response.status = 404;
     }
 }
 
