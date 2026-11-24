@@ -139,7 +139,11 @@ const oauthProviders = {
  * - 若未登录且访问受限路由，则显示登录页面
  */
 export async function authMiddleware(ctx: Context, next: () => Promise<unknown>) {
-  const session = ctx.state.session;
+  // Fresh session per request. Oak builds ctx.state on top of Application.state,
+  // so a Map kept there would be shared by every request and would leak the last
+  // authenticated identity to callers that send no token at all.
+  const session = new Map<string, object>();
+  ctx.state.session = session;
   let token = await ctx.cookies.get("token");  // 从 cookie 中取出 Token
   const currentPath = ctx.request.url.pathname;
   const method = ctx.request.method;
