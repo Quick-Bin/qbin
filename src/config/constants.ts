@@ -24,6 +24,23 @@ export const basePath = Deno.cwd();
 
 export const EMAIL = get_env("ADMIN_EMAIL", "admin@qbin.github");
 export const PASSWORD = get_env("ADMIN_PASSWORD", "qbin");
+
+// Refuse to start with the secrets shipped in docker-compose.yml, .env.template
+// and the docs: they are publicly known, so anyone could sign an admin token or
+// log in with the documented admin password.
+const INSECURE_JWT_SECRETS = [
+  "input-your-jwtSecret",
+  "your_jwt_secret",
+  "XTV0x5ecm5",
+];
+if (!jwtSecret || INSECURE_JWT_SECRETS.includes(jwtSecret)) {
+  throw new Error(
+    "JWT_SECRET must be set to a strong random value (e.g. `openssl rand -hex 32`).",
+  );
+}
+if (!PASSWORD || PASSWORD === "qbin") {
+  throw new Error("ADMIN_PASSWORD must be changed from the shipped default.");
+}
 export const QBIN_ENV = get_env("QBIN_ENV", "prod");
 // 校验访问路径和访问密码字符
 export const VALID_CHARS_REGEX = /^[a-zA-Z0-9-\.\_]+$/;

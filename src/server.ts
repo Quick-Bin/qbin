@@ -14,10 +14,11 @@ import {initializeServices} from "./db/db.ts";
 export function createServer(): Application<AppState> {
   initializeServices().catch(console.error);  // 预热数据库连接
 
+  // Request state must not live in Application.state: Oak inherits the
+  // application state into every ctx.state, so a Map here would be shared by
+  // all requests and one user's identity would leak into everyone else's.
   const app = new Application<AppState>({
-    state: {
-      session: new Map<string, object>()
-    },
+    state: {},
   });
 
   app.use(errorMiddleware);
